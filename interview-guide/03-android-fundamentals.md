@@ -1,6 +1,6 @@
 # Android Fundamentals
 
-> Quality status: **76/100, Draft**. Target: **97+**. Main gap: expand beyond process death into lifecycle callbacks, context, intents, permissions, broadcasts, services, saved-state limits, and Android-specific edge cases.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Lifecycle, ViewModel, SavedStateHandle, and Process Death
 

@@ -1,6 +1,6 @@
 # Book Format Recommendation
 
-> Quality status: **88/100, Upgrading**. Target: **95+**. Main gap: add final publishing/export conventions after chapter format stabilizes.
+> Quality status: **Internal publishing spec, current**. Last verified: 2026-05-26. The active PDF/HTML publishing path is implemented in `scripts/export_interview_guide_pdf.py`, `index.html`, and `reader.html`.
 
 ## Source Format
 

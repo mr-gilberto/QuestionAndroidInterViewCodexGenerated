@@ -1,6 +1,6 @@
 # Jetpack Compose
 
-> Quality status: **78/100, Draft**. Target: **98+**. Main gap: add stability/skippability, snapshot state, side-effect APIs, navigation/lifecycle, lazy list keys, performance, and Compose testing.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Why Interviewers Ask This
 

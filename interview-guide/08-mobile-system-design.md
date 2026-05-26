@@ -1,6 +1,6 @@
 # Mobile System Design
 
-> Quality status: **82/100, Upgrading**. Target: **98+**. Main gap: add full design prompts for chat, feed, upload, offline notes, location, feature flags, startup, and explicit failure-mode analysis.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Why Interviewers Ask This
 

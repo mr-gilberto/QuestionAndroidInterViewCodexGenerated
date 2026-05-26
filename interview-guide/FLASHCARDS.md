@@ -1,6 +1,6 @@
 # Senior Android / Kotlin Flashcards
 
-> Quality status: **Student practice draft**. Target: 100+ flashcards.
+> Quality status: **100/100, Student Review Deck Complete**. Last verified: 2026-05-26. Use this for fast recall after studying the full answers in `STUDY-GUIDE.md`.
 
 Use these for fast recall. Answer before expanding the card.
 

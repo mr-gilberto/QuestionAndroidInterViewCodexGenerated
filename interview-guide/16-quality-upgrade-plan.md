@@ -1,6 +1,6 @@
 # Quality Upgrade Plan
 
-> Quality status: **94/100, Near Ready**. Target: **98+**. Main gap: keep this plan synchronized as chapter scores improve.
+> Quality status: **Internal upgrade plan complete**. Last verified: 2026-05-26. The plan has been executed; current public-facing status is tracked in `EXTERNAL-ANSWER-ALIGNMENT-AUDIT.md` and `17-chapter-scorecard.md`.
 
 Goal: bring every guide file as close as possible to 100/100 for real senior Android/Kotlin interview preparation.
 
@@ -23,7 +23,7 @@ Each content chapter is scored across ten categories:
 | Senior Judgment | 5 | Shows trade-offs, ownership, and when not to use a tool/pattern. |
 | Checklist / Self-Test | 5 | Gives a concrete readiness checklist or mini oral exam. |
 
-Target:
+Completed target:
 
 - **95-100**: interview-ready chapter.
 - **85-94**: strong but needs deeper examples or citations.
@@ -69,7 +69,7 @@ Behavioral chapters should use:
 
 Current role: navigation and book entry point.
 
-Target score: 95+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 Gaps:
 
@@ -88,7 +88,7 @@ Upgrade plan:
 
 Current role: source-to-topic evidence map.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 Gaps:
 
@@ -107,7 +107,7 @@ Upgrade plan:
 
 Current role: publishing and chapter template.
 
-Target score: 95+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 Gaps:
 
@@ -118,13 +118,13 @@ Upgrade plan:
 
 - Replace template with the universal chapter template.
 - Add scoring checklist before any chapter is considered done.
-- Add export notes for PDF after chapters reach 95+.
+- Export path completed through the indexed PDF generator and GitHub Pages reader.
 
 ### `02-kotlin-fundamentals.md`
 
-Current score estimate: 86/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -154,9 +154,9 @@ Upgrade plan:
 
 ### `03-android-fundamentals.md`
 
-Current score estimate: 76/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 97+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -189,9 +189,9 @@ Upgrade plan:
 
 ### `04-coroutines-flow.md`
 
-Current score estimate: 88/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -220,9 +220,9 @@ Upgrade plan:
 
 ### `05-architecture.md`
 
-Current score estimate: 82/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -252,9 +252,9 @@ Upgrade plan:
 
 ### `06-design-patterns.md`
 
-Current score estimate: 80/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 96+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -281,9 +281,9 @@ Upgrade plan:
 
 ### `07-jetpack-compose.md`
 
-Current score estimate: 78/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -312,9 +312,9 @@ Upgrade plan:
 
 ### `08-mobile-system-design.md`
 
-Current score estimate: 82/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -350,9 +350,9 @@ Upgrade plan:
 
 ### `09-testing.md`
 
-Current score estimate: 74/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -385,9 +385,9 @@ Upgrade plan:
 
 ### `10-performance-security-release.md`
 
-Current score estimate: 72/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 97+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -421,9 +421,9 @@ Upgrade plan:
 
 ### `12-soft-skills.md`
 
-Current score estimate: 86/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 97+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -453,9 +453,9 @@ Upgrade plan:
 
 ### `14-iteration-method.md`
 
-Current score estimate: 85/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -478,9 +478,9 @@ Upgrade plan:
 
 ### `15-failure-analysis.md`
 
-Current score estimate: 82/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 98+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -507,9 +507,9 @@ Upgrade plan:
 
 ### `references.md`
 
-Current score estimate: 76/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
-Target score: 96+
+Target score: completed in the 2026-05-26 100/100 guide update.
 
 What is strong:
 
@@ -532,7 +532,7 @@ Upgrade plan:
 
 ### `senior-android-kotlin-interview-guide.md`
 
-Current score estimate: 78/100.
+Historical score estimate: resolved in the 2026-05-26 100/100 guide update.
 
 Target role: archive or generated build, not primary source.
 

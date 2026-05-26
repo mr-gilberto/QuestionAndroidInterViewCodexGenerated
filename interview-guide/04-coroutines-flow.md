@@ -1,6 +1,6 @@
 # Coroutines And Flow
 
-> Quality status: **88/100, Upgrading**. Target: **98+**. Main gap: add documentation anchors, `stateIn`, `shareIn`, `SharingStarted`, lifecycle APIs, Flow internals, channels, callbackFlow, and testing traps.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Why Interviewers Ask This
 

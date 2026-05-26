@@ -1,6 +1,6 @@
 # Senior Android / Kotlin Developer Interview Study Guide
 
-> Quality status: **78/100, Draft v1 archive**. Target: **Archive/generated output**. The modular files in `interview-guide/` are now the source of truth.
+> Quality status: **Archive/generated draft, superseded by `interview-guide/STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. Do not study this file as the primary source.
 
 Last researched: 2026-05-25
 

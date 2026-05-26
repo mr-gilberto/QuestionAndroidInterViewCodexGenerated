@@ -1,6 +1,6 @@
 # Guide Specification
 
-> Quality status: **New editorial source of truth**. Target: keep this file updated whenever the guide structure changes.
+> Quality status: **Editorial source of truth, current**. Last verified: 2026-05-26. The implemented guide structure now follows this student-facing format.
 
 This document defines what the Senior Android / Kotlin interview guide must become. It exists so future iterations do not lose the thread.
 

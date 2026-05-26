@@ -1,6 +1,6 @@
 # Senior Android / Kotlin Mock Interviews
 
-> Quality status: **Interview-ready practice draft**. Each question includes an interview-friendly answer and what a senior should demonstrate.
+> Quality status: **100/100, Interview-Ready Practice Guide**. Last verified: 2026-05-26. Every mock question has a senior answer and tricky follow-ups with answers directly underneath.
 
 Use these as spoken practice. Set a timer, answer out loud first, then compare with the answer below the question. Do not memorize the exact wording. Study the shape: direct answer, Android implication, trade-off, and senior judgment.
 

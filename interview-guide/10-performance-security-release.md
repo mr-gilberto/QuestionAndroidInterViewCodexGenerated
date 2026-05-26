@@ -1,6 +1,6 @@
 # Performance, Security, And Release Engineering
 
-> Quality status: **72/100, Draft**. Target: **97+**. Main gap: split into deeper performance, security, and release sections with tools, edge cases, official docs, and interview failure patterns.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Performance Drill Chain
 

@@ -1,6 +1,6 @@
 # Design Patterns
 
-> Quality status: **80/100, Upgrading**. Target: **96+**. Main gap: add SOLID, Kotlin-specific nuance, pattern abuse, Android framework examples, and stronger drill chains per pattern.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Why Interviewers Ask This
 

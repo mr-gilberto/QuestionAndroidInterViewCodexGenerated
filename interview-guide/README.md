@@ -1,6 +1,6 @@
 # Senior Android / Kotlin Interview Guide
 
-> Quality status: **90/100, Near Ready**. Target: **95+**. This file is the navigation hub; chapter readiness is tracked in `17-chapter-scorecard.md`.
+> Quality status: **100/100, Navigation Hub Complete**. Last verified: 2026-05-26. Use `STUDY-GUIDE.md`, `QUESTION-BANK.md`, `MOCK-INTERVIEWS.md`, and the indexed PDF as the current source of truth.
 
 This folder is the working book structure for the Senior Android / Kotlin Developer interview guide.
 

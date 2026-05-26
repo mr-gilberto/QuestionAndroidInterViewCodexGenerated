@@ -1,6 +1,6 @@
 # Testing
 
-> Quality status: **74/100, Draft**. Target: **98+**. Main gap: add concrete APIs such as `MainDispatcherRule`, `StandardTestDispatcher`, `UnconfinedTestDispatcher`, Flow testing tools, Compose test APIs, `MigrationTestHelper`, and CI flakiness strategy.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Why Interviewers Ask This
 

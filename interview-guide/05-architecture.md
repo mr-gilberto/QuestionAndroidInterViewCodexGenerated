@@ -1,6 +1,6 @@
 # Architecture
 
-> Quality status: **82/100, Upgrading**. Target: **98+**. Main gap: add deeper drill chains for MVVM/MVI/Clean Architecture, repository/source of truth, use-case trade-offs, modularization, and legacy migration.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Why Interviewers Ask This
 

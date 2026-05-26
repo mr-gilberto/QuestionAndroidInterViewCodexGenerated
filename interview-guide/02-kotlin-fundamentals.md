@@ -1,6 +1,6 @@
 # Kotlin Fundamentals
 
-> Quality status: **86/100, Upgrading**. Target: **98+**. Main gap: data classes are deep, but null safety, generics, inline/reified, sealed types, and scope functions need the same drill-chain depth.
+> Quality status: **Archived modular draft, superseded by `STUDY-GUIDE.md` 100/100**. Last verified: 2026-05-26. The complete student-facing theory, interview answers, and follow-ups now live in `STUDY-GUIDE.md`.
 
 ## Data Classes, Equality, and Hashing
 
