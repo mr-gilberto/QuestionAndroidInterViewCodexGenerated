@@ -1646,21 +1646,21 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 **Tricky follow-ups answered:**
 
-**Follow-up:** What must be validated?
+**Follow-up:** When should WorkManager not be used?
 
-**Answer:** Intent extras, URI parameters, auth/session state, permissions, exported status, and destination authorization.
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
 
-**Follow-up:** How do you choose background work?
+**Follow-up:** What makes retries safe?
 
-**Answer:** Use WorkManager for deferrable persistent work, foreground service for user-visible ongoing work, and receivers for short event handling.
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
 
-**Follow-up:** What is the cold-start problem?
+**Follow-up:** What do constraints actually mean?
 
-**Answer:** A deep link or notification may enter the app without previous in-memory navigation state, so the destination must rebuild required context.
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
 
-**Follow-up:** What is the security angle?
+**Follow-up:** How do you observe and cancel work?
 
-**Answer:** Treat external entry points as untrusted input and avoid exposing privileged actions through exported components.
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
 
 #### Question 16: What is the difference between `onCreate`, `onStart`, and `onResume`?
 
@@ -4448,21 +4448,21 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 **Tricky follow-ups answered:**
 
-**Follow-up:** What must be validated?
+**Follow-up:** When should WorkManager not be used?
 
-**Answer:** Intent extras, URI parameters, auth/session state, permissions, exported status, and destination authorization.
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
 
-**Follow-up:** How do you choose background work?
+**Follow-up:** What makes retries safe?
 
-**Answer:** Use WorkManager for deferrable persistent work, foreground service for user-visible ongoing work, and receivers for short event handling.
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
 
-**Follow-up:** What is the cold-start problem?
+**Follow-up:** What do constraints actually mean?
 
-**Answer:** A deep link or notification may enter the app without previous in-memory navigation state, so the destination must rebuild required context.
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
 
-**Follow-up:** What is the security angle?
+**Follow-up:** How do you observe and cancel work?
 
-**Answer:** Treat external entry points as untrusted input and avoid exposing privileged actions through exported components.
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
 
 #### Question 7: How do you handle offline writes?
 
@@ -4554,25 +4554,25 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 #### Question 11: Design token refresh architecture.
 
-**Senior answer:** "I would design for mobile failure first: flaky network, process death, auth changes, offline use, retries, duplicate submissions, battery, and OS background limits. A durable local source of truth gives UI a stable model. Pending operations need IDs, status, retry policy, idempotency keys, and reconciliation rules. WorkManager handles deferrable persistent background work; foreground service is for user-visible ongoing work. Conflicts require a product policy, not just code. A senior answer includes logout behavior, token refresh, cache invalidation, monitoring, and how the system recovers after restart without losing or duplicating user work."
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
 
 **Tricky follow-ups answered:**
 
-**Follow-up:** What is the durable truth?
+**Follow-up:** Interceptor or authenticator?
 
-**Answer:** Usually Room or another persistent store observed by UI, with repositories/workers reconciling network state into it.
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
 
-**Follow-up:** How do retries stay safe?
+**Follow-up:** How do you model API errors?
 
-**Answer:** Persist operations with stable IDs, idempotency keys, retry policy, and terminal failure states.
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
 
-**Follow-up:** How do you handle conflicts?
+**Follow-up:** How do you prevent duplicate writes?
 
-**Answer:** Choose a product policy: server wins, client wins, last-write-wins, merge, or user resolution.
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
 
-**Follow-up:** What do you monitor?
+**Follow-up:** Where does networking logic belong?
 
-**Answer:** Queue age, retry count, conflict rate, auth failures, duplicate attempts, terminal failures, and crash/error spikes.
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
 
 #### Question 12: Design app startup for a large app.
 
@@ -5252,21 +5252,21 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 **Tricky follow-ups answered:**
 
-**Follow-up:** What must the test control?
+**Follow-up:** When should WorkManager not be used?
 
-**Answer:** Dispatchers, time, dependencies, lifecycle, data, permissions, network, and external services.
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
 
-**Follow-up:** Why avoid sleeps?
+**Follow-up:** What makes retries safe?
 
-**Answer:** Sleeps make tests slow and flaky. Virtual time and explicit scheduler advancement make timing deterministic.
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
 
-**Follow-up:** When are fakes better than mocks?
+**Follow-up:** What do constraints actually mean?
 
-**Answer:** When behavior and state matter across multiple calls. Mocks are useful for narrow interaction checks.
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
 
-**Follow-up:** Which failure paths should be covered?
+**Follow-up:** How do you observe and cancel work?
 
-**Answer:** Cover errors, cancellation, retries, empty states, race-prone lifecycle changes, and release-sensitive paths, not only happy cases.
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
 
 #### Question 18: What makes UI tests flaky?
 
@@ -5540,47 +5540,47 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 #### Question 7: Can secrets be hidden in the APK?
 
-**Senior answer:** "I would start with evidence and threat model. For performance, measure frame timing, main-thread work, startup path, allocations, I/O, and traces using Perfetto, Android Studio Profiler, Macrobenchmark, Baseline Profiles, Android Vitals, and LeakCanary when memory is involved. For security and release, assume the APK is inspectable and the client is not fully trusted: protect tokens, validate entry points, minimize exported surfaces, be careful with WebView bridges, and test minified release builds. R8, keep rules, mapping files, staged rollout, crash monitoring, and rollback strategy are part of the production answer, not afterthoughts."
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
 
 **Tricky follow-ups answered:**
 
-**Follow-up:** What do you measure first?
+**Follow-up:** What differs between debug and release?
 
-**Answer:** Frame timing, main-thread blocking, startup phases, allocations, I/O, lock contention, crash rate, or security boundary depending on the issue.
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
 
-**Follow-up:** What can release builds change?
+**Follow-up:** APK or AAB?
 
-**Answer:** R8 can remove or rename code used by reflection/serialization, change stack traces, and expose keep-rule gaps.
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
 
-**Follow-up:** Can secrets be hidden in an APK?
+**Follow-up:** What should CI verify?
 
-**Answer:** No. The client is inspectable. Authorization must be enforced server-side and secrets should not rely on obscurity.
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
 
-**Follow-up:** What is the production answer?
+**Follow-up:** What release files matter after shipping?
 
-**Answer:** Use staged rollout, monitoring, mapping files, rollback/feature flags, and a small verified fix.
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
 
 #### Question 8: Certificate pinning: good idea or risk?
 
-**Senior answer:** "I would start with evidence and threat model. For performance, measure frame timing, main-thread work, startup path, allocations, I/O, and traces using Perfetto, Android Studio Profiler, Macrobenchmark, Baseline Profiles, Android Vitals, and LeakCanary when memory is involved. For security and release, assume the APK is inspectable and the client is not fully trusted: protect tokens, validate entry points, minimize exported surfaces, be careful with WebView bridges, and test minified release builds. R8, keep rules, mapping files, staged rollout, crash monitoring, and rollback strategy are part of the production answer, not afterthoughts."
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
 
 **Tricky follow-ups answered:**
 
-**Follow-up:** What do you measure first?
+**Follow-up:** Interceptor or authenticator?
 
-**Answer:** Frame timing, main-thread blocking, startup phases, allocations, I/O, lock contention, crash rate, or security boundary depending on the issue.
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
 
-**Follow-up:** What can release builds change?
+**Follow-up:** How do you model API errors?
 
-**Answer:** R8 can remove or rename code used by reflection/serialization, change stack traces, and expose keep-rule gaps.
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
 
-**Follow-up:** Can secrets be hidden in an APK?
+**Follow-up:** How do you prevent duplicate writes?
 
-**Answer:** No. The client is inspectable. Authorization must be enforced server-side and secrets should not rely on obscurity.
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
 
-**Follow-up:** What is the production answer?
+**Follow-up:** Where does networking logic belong?
 
-**Answer:** Use staged rollout, monitoring, mapping files, rollback/feature flags, and a small verified fix.
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
 
 #### Question 9: How do you secure deep links?
 
@@ -6379,4 +6379,1124 @@ Study these as behavioral interview prompts. First answer out loud, then compare
 **Follow-up:** How do you show ownership without bragging?
 
 **Answer:** Name the risk, the people affected, the trade-off you chose, the outcome, and what changed afterward.
+
+## 11. WorkManager And Background Work
+
+### Documentation Anchors
+- [WorkManager overview](https://developer.android.com/topic/libraries/architecture/workmanager/)
+- [WorkManager API reference](https://developer.android.com/reference/androidx/work/WorkManager.html)
+- [Define WorkRequests](https://developer.android.com/guide/background/persistent/getting-started/define-work)
+- [Foreground service types](https://developer.android.com/develop/background-work/services/fgs/service-types)
+
+### Theory To Know
+
+WorkManager is a senior-interview topic because it tests whether you understand Android background execution, process death, retries, OS scheduling, and user-visible work. The basic answer is not "use WorkManager for background tasks." The real answer is about the guarantee: WorkManager is for deferrable persistent work that should survive app process death and can run when constraints are met.
+
+The interviewer may compare WorkManager with coroutines, services, foreground services, broadcasts, and alarms. A coroutine is in-process work tied to a scope. A foreground service is ongoing user-visible work with a notification and OS restrictions. A BroadcastReceiver should stay short. WorkManager can persist a unit of work, apply constraints, retry with backoff, chain operations, observe `WorkInfo`, cancel by id/tag/unique name, and use `CoroutineWorker` for suspend-friendly work.
+
+### Interview Question: WorkManager vs foreground service vs coroutine?
+
+Strong answer to practice:
+
+"I choose based on lifetime, immediacy, user visibility, and OS policy. WorkManager is for deferrable persistent work that can survive process death and run with constraints and retry. A foreground service is for ongoing work the user expects to continue immediately and visibly, like navigation, recording, or a long-running transfer. A coroutine is only in-process and scope-bound, so it is not a persistence guarantee."
+
+### Topic Drill Questions
+
+#### Question 1: What is WorkManager?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 2: When should you use WorkManager?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 3: WorkManager vs coroutine vs foreground service?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 4: `OneTimeWorkRequest` vs `PeriodicWorkRequest`?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 5: What are WorkManager constraints?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 6: What do `Result.success`, `Result.failure`, and `Result.retry` mean?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 7: Linear vs exponential backoff?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 8: What is unique work and when use `KEEP`, `REPLACE`, or `APPEND`?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 9: What is `CoroutineWorker`?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 10: What is expedited work?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 11: How do you observe, cancel, and chain work?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+#### Question 12: How do you test WorkManager?
+
+**Senior answer:** "I test WorkManager by making scheduled work deterministic. I initialize WorkManager with a test configuration, enqueue the `WorkRequest`, and use the test driver to mark constraints or initial delays as met instead of waiting for real time or real network. Then I assert `WorkInfo` state, output data, retry/failure behavior, and the durable side effect, such as a database record changing from pending to synced. Dependencies should be fake or injected, especially network clients, repositories, and clocks. For a senior answer, I would also test process-recovery assumptions indirectly: persisted input data, idempotent operation IDs, retry policy, and no duplicate server writes."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+## 12. Networking, Auth, And API Boundaries
+
+### Documentation Anchors
+- [Android security best practices](https://developer.android.com/privacy-and-security/security-best-practices)
+- [Network security configuration](https://developer.android.com/privacy-and-security/security-config)
+- [OkHttp documentation](https://square.github.io/okhttp/)
+- [Retrofit documentation](https://square.github.io/retrofit/)
+
+### Theory To Know
+
+Senior Android networking questions are rarely only "what is Retrofit?" They usually probe boundaries: where API mechanics live, how errors are modeled, how auth refresh avoids race conditions, how retries avoid duplicate writes, how cache freshness is decided, and how security trade-offs are handled.
+
+Retrofit describes API interfaces and conversion. OkHttp owns the lower-level HTTP client, interceptors, authenticators, caching behavior, TLS settings, and connection mechanics. Repositories should not leak raw DTO or HTTP details into the UI. They should map DTOs, own freshness policy, and expose domain/UI state.
+
+### Interview Question: How do you design networking and auth refresh in Android?
+
+Strong answer to practice:
+
+"I separate API mechanics from data policy. Retrofit/OkHttp live behind data sources, repositories map DTOs and decide cache/freshness, and UI observes domain or UI state. For auth, I avoid every request refreshing independently; I use a coordinated refresh path, often an authenticator, and handle failures by clearing session or surfacing re-auth. For retryable writes, I use idempotency keys or operation IDs."
+
+### Topic Drill Questions
+
+#### Question 1: Retrofit vs OkHttp?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 2: Interceptor vs Authenticator?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 3: How do you avoid token refresh race conditions?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 4: How do you model API errors?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 5: HTTP error vs network error vs serialization error?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 6: How do cache headers compare with a Room source of truth?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 7: How do you retry POST safely?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 8: What are idempotency keys?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 9: Certificate pinning: when is it worth it?
+
+**Senior answer:** "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** Interceptor or authenticator?
+
+**Answer:** Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh.
+
+**Follow-up:** How do you model API errors?
+
+**Answer:** Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly.
+
+**Follow-up:** How do you prevent duplicate writes?
+
+**Answer:** Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state.
+
+**Follow-up:** Where does networking logic belong?
+
+**Answer:** Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state.
+
+#### Question 10: How do you cancel network requests with lifecycle?
+
+**Senior answer:** "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** When should WorkManager not be used?
+
+**Answer:** Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee.
+
+**Follow-up:** What makes retries safe?
+
+**Answer:** Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat.
+
+**Follow-up:** What do constraints actually mean?
+
+**Answer:** Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution.
+
+**Follow-up:** How do you observe and cancel work?
+
+**Answer:** Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state.
+
+## 13. Build, Gradle, CI/CD, And Release Engineering
+
+### Documentation Anchors
+- [Configure build variants](https://developer.android.com/build/build-variants)
+- [Android App Bundles](https://developer.android.com/guide/app-bundle)
+- [Shrink, obfuscate, and optimize](https://developer.android.com/build/shrink-code)
+- [Version your app](https://developer.android.com/studio/publish/versioning)
+
+### Theory To Know
+
+Senior Android interviews can include release engineering because production Android is not only Kotlin code. Build variants, product flavors, signing, minification, app bundles, versioning, CI gates, mapping files, staged rollout, and rollback strategy are part of shipping safely.
+
+A strong answer should connect build configuration to production risk. Debug and release can behave differently because of R8, resource shrinking, signing, debuggability, backend endpoints, and feature flags. CI/CD should catch regressions before Play rollout and preserve the artifacts needed to diagnose issues after release.
+
+### Interview Question: What can go wrong between debug and release builds?
+
+Strong answer to practice:
+
+"Release builds are different products: they are signed, often minified and optimized, not debuggable, and may use different config. R8 can break reflection/serialization if keep rules are wrong, mapping files are required for readable crashes, and staged rollout plus monitoring reduces blast radius. I test release builds because debug success does not prove production safety."
+
+### Topic Drill Questions
+
+#### Question 1: What are build variants and product flavors?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 2: Debug vs release build?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 3: APK vs AAB?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 4: What is `versionCode` used for?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 5: What should CI/CD verify for Android?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 6: What are signing configs and why protect them?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 7: How do R8 and keep rules affect release?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 8: Why preserve mapping files?
+
+**Senior answer:** "I would start with evidence and threat model. For performance, measure frame timing, main-thread work, startup path, allocations, I/O, and traces using Perfetto, Android Studio Profiler, Macrobenchmark, Baseline Profiles, Android Vitals, and LeakCanary when memory is involved. For security and release, assume the APK is inspectable and the client is not fully trusted: protect tokens, validate entry points, minimize exported surfaces, be careful with WebView bridges, and test minified release builds. R8, keep rules, mapping files, staged rollout, crash monitoring, and rollback strategy are part of the production answer, not afterthoughts."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What do you measure first?
+
+**Answer:** Frame timing, main-thread blocking, startup phases, allocations, I/O, lock contention, crash rate, or security boundary depending on the issue.
+
+**Follow-up:** What can release builds change?
+
+**Answer:** R8 can remove or rename code used by reflection/serialization, change stack traces, and expose keep-rule gaps.
+
+**Follow-up:** Can secrets be hidden in an APK?
+
+**Answer:** No. The client is inspectable. Authorization must be enforced server-side and secrets should not rely on obscurity.
+
+**Follow-up:** What is the production answer?
+
+**Answer:** Use staged rollout, monitoring, mapping files, rollback/feature flags, and a small verified fix.
+
+#### Question 9: How do you design staged rollout and rollback?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+#### Question 10: How do version catalogs and modular builds affect large apps?
+
+**Senior answer:** "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What differs between debug and release?
+
+**Answer:** Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior.
+
+**Follow-up:** APK or AAB?
+
+**Answer:** AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications.
+
+**Follow-up:** What should CI verify?
+
+**Answer:** Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation.
+
+**Follow-up:** What release files matter after shipping?
+
+**Answer:** Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix.
+
+## 14. Accessibility And Design Systems
+
+### Documentation Anchors
+- [Android accessibility principles](https://developer.android.com/guide/topics/ui/accessibility/principles)
+- [Build accessible apps with Compose](https://developer.android.com/develop/ui/compose/accessibility)
+- [Compose semantics](https://developer.android.com/develop/ui/compose/accessibility/semantics)
+- [Material accessibility](https://m3.material.io/foundations/accessible-design/overview)
+
+### Theory To Know
+
+Accessibility is a senior Android topic because it tests whether you treat UI quality as a contract, not decoration. Interviewers may ask directly about TalkBack, content descriptions, font scale, focus order, touch targets, contrast, error states, or how a design system prevents repeated accessibility bugs.
+
+Compose adds a semantics tree that testing and accessibility services can read. Custom components must expose meaning, state, and actions. A design system should encode accessible defaults so individual feature teams do not reinvent basic behavior incorrectly.
+
+### Interview Question: How do you make a Compose screen accessible?
+
+Strong answer to practice:
+
+"I start with meaning: every interactive element needs the right role, label, state, action, focus order, and touch target. I test with TalkBack and font scale, not only with screenshots. In Compose I use semantics intentionally and avoid custom components that look correct visually but expose the wrong accessibility tree. A design system helps by making accessible behavior reusable."
+
+### Topic Drill Questions
+
+#### Question 1: What should TalkBack announce?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 2: `contentDescription` vs visible text?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 3: What is the Compose semantics tree?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 4: How do font scale and dynamic type break layouts?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 5: What are touch target and contrast requirements?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 6: How do design systems improve accessibility?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 7: How do you test accessibility regressions?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+#### Question 8: When can snapshot/golden tests help or hurt accessibility?
+
+**Senior answer:** "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should TalkBack announce?
+
+**Answer:** It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI.
+
+**Follow-up:** What breaks with font scale?
+
+**Answer:** Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales.
+
+**Follow-up:** How does a design system help?
+
+**Answer:** It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states.
+
+**Follow-up:** How do you test accessibility?
+
+**Answer:** Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components.
+
+## 15. Kotlin Multiplatform Optional Topic
+
+### Documentation Anchors
+- [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
+- [KMP expect/actual](https://kotlinlang.org/docs/multiplatform-expect-actual.html)
+
+### Theory To Know
+
+Kotlin Multiplatform is not always required for Senior Android roles, but it increasingly appears in broad mobile architecture conversations. The safe senior answer is balanced: share code where it reduces duplicated business logic without forcing platform-specific concerns into awkward abstractions.
+
+Good shared candidates include validation, domain rules, use cases, serialization models, and networking clients when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native.
+
+### Interview Question: What would you share with KMP, and what would stay native?
+
+Strong answer to practice:
+
+"I would share stable business logic, validation, models, and use cases when the platform boundaries are clean. I would keep UI, navigation, permissions, background work, platform security, and device integrations native unless there is a strong reason. KMP is useful when it reduces duplicated domain code, but it can hurt if the team shares too much and turns every platform feature into an abstraction fight."
+
+### Topic Drill Questions
+
+#### Question 1: What is Kotlin Multiplatform?
+
+**Senior answer:** "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should be shared?
+
+**Answer:** Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled.
+
+**Follow-up:** What should usually stay native?
+
+**Answer:** UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific.
+
+**Follow-up:** What is `expect/actual` for?
+
+**Answer:** It lets shared code depend on a common API while each platform provides its own implementation.
+
+**Follow-up:** What is the main risk?
+
+**Answer:** Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead.
+
+#### Question 2: What layers are good candidates for KMP sharing?
+
+**Senior answer:** "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should be shared?
+
+**Answer:** Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled.
+
+**Follow-up:** What should usually stay native?
+
+**Answer:** UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific.
+
+**Follow-up:** What is `expect/actual` for?
+
+**Answer:** It lets shared code depend on a common API while each platform provides its own implementation.
+
+**Follow-up:** What is the main risk?
+
+**Answer:** Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead.
+
+#### Question 3: What should usually stay native?
+
+**Senior answer:** "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should be shared?
+
+**Answer:** Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled.
+
+**Follow-up:** What should usually stay native?
+
+**Answer:** UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific.
+
+**Follow-up:** What is `expect/actual` for?
+
+**Answer:** It lets shared code depend on a common API while each platform provides its own implementation.
+
+**Follow-up:** What is the main risk?
+
+**Answer:** Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead.
+
+#### Question 4: What is `expect/actual` for?
+
+**Senior answer:** "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should be shared?
+
+**Answer:** Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled.
+
+**Follow-up:** What should usually stay native?
+
+**Answer:** UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific.
+
+**Follow-up:** What is `expect/actual` for?
+
+**Answer:** It lets shared code depend on a common API while each platform provides its own implementation.
+
+**Follow-up:** What is the main risk?
+
+**Answer:** Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead.
+
+#### Question 5: How do you test shared KMP code?
+
+**Senior answer:** "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should be shared?
+
+**Answer:** Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled.
+
+**Follow-up:** What should usually stay native?
+
+**Answer:** UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific.
+
+**Follow-up:** What is `expect/actual` for?
+
+**Answer:** It lets shared code depend on a common API while each platform provides its own implementation.
+
+**Follow-up:** What is the main risk?
+
+**Answer:** Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead.
+
+#### Question 6: What are the risks of sharing too much?
+
+**Senior answer:** "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+
+**Tricky follow-ups answered:**
+
+**Follow-up:** What should be shared?
+
+**Answer:** Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled.
+
+**Follow-up:** What should usually stay native?
+
+**Answer:** UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific.
+
+**Follow-up:** What is `expect/actual` for?
+
+**Answer:** It lets shared code depend on a common API while each platform provides its own implementation.
+
+**Follow-up:** What is the main risk?
+
+**Answer:** Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead.
 

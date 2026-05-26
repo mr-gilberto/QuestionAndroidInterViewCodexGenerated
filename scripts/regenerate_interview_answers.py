@@ -46,6 +46,16 @@ def category(question: str) -> str:
 
     if "local source of truth" in q:
         return "system"
+    if has_any(q, ["workmanager", "work request", "workrequest", "coroutineworker", "listenableworker", "periodicwork", "onetimework", "unique work", "backoff", "expedited work", "work chain", "chain work", "workinfo", "result.success", "result.failure", "result.retry", "observe, cancel"]):
+        return "workmanager"
+    if has_any(q, ["retrofit", "okhttp", "interceptor", "authenticator", "token refresh", "api error", "http error", "serialization error", "network error", "networking", "graphql", "grpc", "request cancellation", "cache header", "cache headers", "idempotency key", "certificate pinning", "retry post"]):
+        return "networking"
+    if has_any(q, ["gradle", "ci/cd", "ci pipeline", "build variant", "product flavor", "debug vs release", "aab", "apk", "signing", "versioncode", "version code", "release artifact", "version catalog", "staged rollout", "rollback", "r8 and keep rules"]):
+        return "build"
+    if has_any(q, ["accessibility", "talkback", "contentdescription", "content description", "font scale", "touch target", "design system", "design token", "semantics tree", "accessibility regression", "snapshot/golden", "golden tests"]):
+        return "accessibility"
+    if has_any(q, ["kmp", "kotlin multiplatform", "expect/actual", "expect actual", "shared domain", "shared business logic", "platform-specific ui", "stay native", "shared code", "sharing too much"]):
+        return "kmp"
     if has_any(q, ["how do you test release builds", "test release builds"]):
         return "perfsec"
     if has_any(q, ["test", "testing", "fakes", "mocks", "maindispatcherrule", "standardtestdispatcher", "unconfinedtestdispatcher", "advanceuntilidle", "turbine", "virtual time", "flaky"]):
@@ -228,6 +238,26 @@ def category_answer(question: str, cat: str) -> str:
         return (
             "I would start with evidence and threat model. For performance, measure frame timing, main-thread work, startup path, allocations, I/O, and traces using Perfetto, Android Studio Profiler, Macrobenchmark, Baseline Profiles, Android Vitals, and LeakCanary when memory is involved. For security and release, assume the APK is inspectable and the client is not fully trusted: protect tokens, validate entry points, minimize exported surfaces, be careful with WebView bridges, and test minified release builds. R8, keep rules, mapping files, staged rollout, crash monitoring, and rollback strategy are part of the production answer, not afterthoughts."
         )
+    if cat == "workmanager":
+        return (
+            "I would describe WorkManager as the Android API for deferrable persistent work, not as a generic background thread. It is a good fit when work should survive process death, respect constraints like network or charging, and retry with backoff. `OneTimeWorkRequest` handles one-off jobs; `PeriodicWorkRequest` handles recurring work with minimum interval limits. A `CoroutineWorker` is the common Kotlin choice when the work is suspend-friendly. The senior trap is immediacy: WorkManager is scheduled by the OS and is not a promise that work starts now. For user-visible ongoing work, I compare foreground service policy, notifications, and product expectations."
+        )
+    if cat == "networking":
+        return (
+            "I would separate networking responsibilities clearly. Retrofit describes the HTTP API interface and converts responses; OkHttp owns the lower-level client, interceptors, connection behavior, caching, and authenticators. I model errors explicitly: network failure, HTTP error, serialization error, auth failure, and domain failure are not the same. Token refresh should avoid races, usually through an authenticator or synchronized refresh path, and retries for writes need idempotency keys so duplicate submissions do not happen. In Android architecture, networking should be a data-source boundary; repositories map DTOs, enforce cache freshness, and expose stable domain or UI state."
+        )
+    if cat == "build":
+        return (
+            "I would answer build and release questions as production risk management. Build variants combine build types and product flavors; release builds differ from debug through minification, signing, debuggability, resources, and sometimes backend endpoints. Android delivery usually uses an AAB for Play, while APKs are installable artifacts useful for local or specific distribution. A healthy CI pipeline runs lint, unit tests, relevant instrumentation tests, static analysis, build verification, signing checks, and release artifact generation. For senior Android work, I also mention versionCode/versionName, mapping files, staged rollout, rollback strategy, dependency locking/version catalogs, and modular build performance."
+        )
+    if cat == "accessibility":
+        return (
+            "I would treat accessibility as part of the UI contract, not polish after the screen is done. In Compose and Views, interactive elements need meaningful labels, state descriptions when useful, correct roles/semantics, adequate touch targets, font-scale support, contrast, focus order, and TalkBack behavior that matches the product action. A design system helps because accessibility rules can live in reusable components: buttons, inputs, dialogs, list items, and error states. For testing, I would combine manual TalkBack checks, semantics assertions, screenshot/golden review where useful, and regression checks for font scale and small screens."
+        )
+    if cat == "kmp":
+        return (
+            "I would describe Kotlin Multiplatform as a way to share selected Kotlin code across platforms, not a reason to force the whole app into one shared layer. Good candidates for sharing are domain rules, validation, networking models, serialization, and use-case logic when platform dependencies are controlled. UI, navigation, permissions, background execution, platform security, and device integrations often stay native. `expect/actual` is useful when shared code needs a platform-specific implementation behind a common API. The senior answer is cautious: KMP can reduce duplicated business logic, but sharing too much can increase interop cost, build complexity, and team coordination overhead."
+        )
     if cat == "behavior":
         return (
             "I would answer with one concrete story, but I would make the structure visible only through natural speech: context, constraint, action, trade-off, result, and what I changed afterward. For a senior Android role, the story should show impact beyond my own ticket: product alignment, technical judgment, risk management, communication, mentoring, and follow-through. I would avoid making other people the problem. If there was conflict, I would separate facts from preferences, show how I created options, and explain how the team converged. The answer should feel honest, specific, and reflective, not like a memorized leadership script."
@@ -327,6 +357,36 @@ FOLLOWUPS = {
         ("What can release builds change?", "R8 can remove or rename code used by reflection/serialization, change stack traces, and expose keep-rule gaps."),
         ("Can secrets be hidden in an APK?", "No. The client is inspectable. Authorization must be enforced server-side and secrets should not rely on obscurity."),
         ("What is the production answer?", "Use staged rollout, monitoring, mapping files, rollback/feature flags, and a small verified fix."),
+    ],
+    "workmanager": [
+        ("When should WorkManager not be used?", "Do not use it for immediate user-visible ongoing work, short in-process async work, or exact alarms. Compare foreground services, coroutines, and alarms based on the guarantee."),
+        ("What makes retries safe?", "Persist input data, use idempotency keys or stable operation IDs, choose backoff, and make server writes safe to repeat."),
+        ("What do constraints actually mean?", "Constraints describe when work is eligible to run, such as network, charging, storage, or battery conditions. They do not guarantee immediate execution."),
+        ("How do you observe and cancel work?", "Use `WorkInfo`, unique work names, tags, chains, and cancellation APIs so UI and repositories can reason about work state."),
+    ],
+    "networking": [
+        ("Interceptor or authenticator?", "Interceptors modify or observe requests/responses. Authenticators respond to authentication challenges and are the safer place for coordinated token refresh."),
+        ("How do you model API errors?", "Separate network failures, HTTP status failures, serialization failures, auth failures, and domain errors so UI and retry policy can react correctly."),
+        ("How do you prevent duplicate writes?", "Use idempotency keys or operation IDs for retryable POST/PUT work and persist pending operation state."),
+        ("Where does networking logic belong?", "Data sources own API mechanics; repositories own policy, mapping, cache freshness, and exposed domain state."),
+    ],
+    "build": [
+        ("What differs between debug and release?", "Release builds are signed, usually minified/optimized, not debuggable, may use different config, and must be tested because R8 and resources can change behavior."),
+        ("APK or AAB?", "AAB is the Play delivery artifact; APK is an installable package. A senior answer names delivery, testing, and distribution implications."),
+        ("What should CI verify?", "Lint, unit tests, selected instrumentation tests, static analysis, dependency checks, build variants, signing configuration, and release artifact creation."),
+        ("What release files matter after shipping?", "Mapping files, version metadata, changelog/rollout notes, crash dashboards, and the ability to rollback or hotfix."),
+    ],
+    "accessibility": [
+        ("What should TalkBack announce?", "It should announce the element purpose, state, and action in a way that matches what sighted users understand from the UI."),
+        ("What breaks with font scale?", "Fixed-height layouts, clipped text, overlapping controls, and custom components that ignore dynamic type can break at large font scales."),
+        ("How does a design system help?", "It centralizes accessible component behavior: labels, focus, roles, contrast, touch targets, and error states."),
+        ("How do you test accessibility?", "Use semantics assertions, manual TalkBack checks, font-scale checks, contrast review, and regression tests for reusable components."),
+    ],
+    "kmp": [
+        ("What should be shared?", "Share stable business rules, validation, models, serialization, and use-case logic when platform dependencies are controlled."),
+        ("What should usually stay native?", "UI, navigation, permissions, background execution, platform security, and device integrations often stay platform-specific."),
+        ("What is `expect/actual` for?", "It lets shared code depend on a common API while each platform provides its own implementation."),
+        ("What is the main risk?", "Sharing too much can increase build complexity, interop cost, platform compromises, and team coordination overhead."),
     ],
     "behavior": [
         ("What should the story prove?", "Judgment, ownership, communication, learning, and impact beyond simply finishing a ticket."),

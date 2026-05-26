@@ -300,3 +300,49 @@ Study rule: do not read the answer first. Speak for 60-120 seconds, then check t
 226. Tell me about a time you improved team process.
 227. Tell me about a time you handled ambiguity.
 228. Tell me about a time you had to make a reversible decision.
+
+229. What is WorkManager?
+230. When should you use WorkManager?
+231. WorkManager vs coroutine vs foreground service?
+232. `OneTimeWorkRequest` vs `PeriodicWorkRequest`?
+233. What are WorkManager constraints?
+234. What do `Result.success`, `Result.failure`, and `Result.retry` mean?
+235. Linear vs exponential backoff?
+236. What is unique work and when use `KEEP`, `REPLACE`, or `APPEND`?
+237. What is `CoroutineWorker`?
+238. What is expedited work?
+239. How do you observe, cancel, and chain work?
+240. How do you test WorkManager?
+241. Retrofit vs OkHttp?
+242. Interceptor vs Authenticator?
+243. How do you avoid token refresh race conditions?
+244. How do you model API errors?
+245. HTTP error vs network error vs serialization error?
+246. How do cache headers compare with a Room source of truth?
+247. How do you retry POST safely?
+248. What are idempotency keys?
+249. Certificate pinning: when is it worth it?
+250. How do you cancel network requests with lifecycle?
+251. What are build variants and product flavors?
+252. Debug vs release build?
+253. APK vs AAB?
+254. What is `versionCode` used for?
+255. What should CI/CD verify for Android?
+256. What are signing configs and why protect them?
+257. How do R8 and keep rules affect release?
+258. How do you design staged rollout and rollback?
+259. How do version catalogs and modular builds affect large apps?
+260. What should TalkBack announce?
+261. `contentDescription` vs visible text?
+262. What is the Compose semantics tree?
+263. How do font scale and dynamic type break layouts?
+264. What are touch target and contrast requirements?
+265. How do design systems improve accessibility?
+266. How do you test accessibility regressions?
+267. What is Kotlin Multiplatform?
+268. What layers are good candidates for KMP sharing?
+269. What should usually stay native?
+270. What is `expect/actual` for?
+271. How do you test shared KMP code?
+272. What are the risks of sharing too much?
+

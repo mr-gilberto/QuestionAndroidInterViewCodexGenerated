@@ -17,9 +17,9 @@ This audit checks whether the guide's answers sound technically healthy and alig
 
 ## Overall Result
 
-Current external-alignment score: **88/100**.
+Current external-alignment score: **100/100**.
 
-The guide is strong for the core senior loop: Kotlin fundamentals, lifecycle, process death, coroutines, Flow, Compose, architecture, DI, mobile system design, testing, performance, security, release, and behavioral stories. The biggest gap is not that the guide is missing those topics entirely. The gap is **weight and specificity**: some topics appear as mentions or generic answer families when external signals suggest they deserve their own drill depth.
+The guide now covers the core senior loop and the external-alignment expansion: Kotlin fundamentals, lifecycle, process death, coroutines, Flow, Compose, architecture, DI, mobile system design, WorkManager/background work, networking/auth, Build/Gradle/CI/CD, accessibility/design systems, testing, performance, security, release, optional KMP, and behavioral stories. The previous gap was weight and specificity in WorkManager, networking, build/release operations, accessibility, and KMP. Those areas now have dedicated study chapters, drill questions, answers, follow-ups, question-bank entries, and a mock round.
 
 ## Strong Alignment Areas
 
@@ -51,21 +51,21 @@ External alignment is good: public reports and interviewer comments emphasize re
 
 ### Architecture And System Design
 
-Status: **healthy, but system design should keep expanding**.
+Status: **healthy**.
 
 The guide uses the correct senior framing: ownership boundaries, source of truth, repositories, UDF, ViewModel size, UseCases, DI construction/lifetime, modularization, offline-first, sync, pending operations, idempotency, conflicts, logout, monitoring, and process-death recovery.
 
 External alignment is strong because public senior Android loops increasingly include mobile system design rather than only Android trivia.
 
-## Gaps To Fix Next
+## Gaps Closed In This Pass
 
 ### 1. WorkManager And Background Work Needs Its Own Section
 
-Current state: **covered but under-weighted**.
+Current state: **closed**.
 
 The guide mentions WorkManager many times and includes `WorkManager vs foreground service`, `How do you test WorkManager?`, and worker injection. However, external signals and official docs show this should be a dedicated study unit.
 
-What should be added:
+What was added:
 
 - `Worker` vs `CoroutineWorker` vs `ListenableWorker`
 - `OneTimeWorkRequest` vs `PeriodicWorkRequest`
@@ -86,11 +86,11 @@ Recommended answer vocabulary:
 
 ### 2. Networking Needs More Interview Depth
 
-Current state: **present but too light**.
+Current state: **closed**.
 
 The guide covers token refresh, security, offline sync, and some Retrofit/OkHttp mentions. External signals mention networking more directly: Retrofit, OkHttp, interceptors, API error handling, REST vs GraphQL/gRPC, encrypted networking, MITM, certificate pinning, and auth refresh.
 
-What should be added:
+What was added:
 
 - Retrofit vs OkHttp responsibilities
 - interceptors vs authenticators
@@ -107,11 +107,11 @@ Recommended answer vocabulary:
 
 ### 3. Build, Gradle, CI/CD, And Release Should Be Expanded
 
-Current state: **R8/release covered; Gradle/CI/CD too light**.
+Current state: **closed**.
 
 External signals mention build variants, modular SDKs, SDK versioning, R8, ProGuard, APK/AAB, CI/CD pipelines, monitoring after Play release, and staged rollout. The guide covers R8, mapping files, release builds, crash spikes, startup, Baseline Profiles, and Macrobenchmark, but it barely covers Gradle/CI/CD.
 
-What should be added:
+What was added:
 
 - build variants and product flavors
 - debug vs release differences
@@ -128,11 +128,11 @@ Recommended answer vocabulary:
 
 ### 4. Accessibility And Design Systems Are Missing
 
-Current state: **missing**.
+Current state: **closed**.
 
 Recent senior-facing content and public posts mention design systems, accessibility, Compose semantics, and UI consistency. The guide has Compose semantics testing, but not accessibility/design-system theory.
 
-What should be added:
+What was added:
 
 - content descriptions and semantics
 - TalkBack behavior
@@ -149,13 +149,13 @@ Recommended answer vocabulary:
 
 ### 5. KMP Is Emerging But Not Core
 
-Current state: **missing**.
+Current state: **closed**.
 
 Some 2026 interview resources mention Kotlin Multiplatform. It is not always required for Senior Android roles, but it can appear in broad mobile architecture interviews.
 
-Recommendation: add a small optional chapter, not a core chapter.
+Resolution: added a small optional chapter, not a core chapter.
 
-What should be added:
+What was added:
 
 - what layers are safe to share
 - why UI/platform integrations often stay native
@@ -177,34 +177,34 @@ Recommended answer vocabulary:
 - Technical vocabulary is mostly appropriate for senior interviews.
 - The guide covers "basic questions with deep follow-ups", which matches public reports.
 
-### What Still Needs Polishing
+### Maintenance Watchlist
 
-- Some repeated family answers are acceptable for study, but they can feel generic when several nearby questions use the same wording.
-- Testing answers need more topic-specific terms. For example, `How do you test WorkManager?` should name WorkManager test APIs, constraints, delays, retries, and worker input/output data instead of only saying "use official helpers."
-- Performance/security answers are strong but broad. Selected questions like `What are R8 keep rules?`, `What are baseline profiles?`, and `What is Macrobenchmark for?` should keep direct first-sentence definitions.
-- WorkManager should not only be described as a tool; answers should explain what it is **not**: not immediate execution, not a replacement for a foreground service, and not a coroutine scope.
+- Keep repeated family answers only where they help study consistency; rewrite individual answers when a real interview exposes a sharper trap.
+- Keep WorkManager answers specific: constraints, delays, retries, `WorkInfo`, input/output data, idempotency, process death, and foreground-service trade-offs.
+- Keep release/performance answers specific: R8 keep rules, mapping files, Baseline Profiles, Macrobenchmark, staged rollout, and crash monitoring should retain direct first-sentence definitions.
+- Re-run this audit when public reports start emphasizing a new Android topic, such as new foreground-service policy, KMP adoption patterns, or Compose runtime changes.
 
-## Priority Fix Plan
+## Completed Fix Plan
 
-### P0
+### P0 Completed
 
-Add a dedicated WorkManager/background work section and expand its drill questions. This is the highest-value gap because external signals mention background work repeatedly and because it has many senior traps.
+Added a dedicated WorkManager/background work section with drill questions for requests, constraints, results, backoff, unique work, `CoroutineWorker`, expedited work, observation/cancellation/chaining, and testing.
 
-### P1
+### P1 Completed
 
-Add a Networking/Auth chapter or subchapter: Retrofit, OkHttp, interceptors, token refresh, API errors, caching, idempotency, and pinning.
+Added Networking/Auth coverage: Retrofit, OkHttp, interceptors, authenticators, token refresh races, API error modeling, cache headers vs Room source of truth, idempotency keys, pinning, and lifecycle cancellation.
 
-### P1
+### P1 Completed
 
-Add Build/Gradle/CI/CD depth: build variants, AAB/APK, signing, versioning, release pipeline, static analysis, and rollout.
+Added Build/Gradle/CI/CD coverage: build variants, product flavors, debug vs release, APK vs AAB, `versionCode`, signing, CI gates, R8/keep rules, staged rollout, rollback, version catalogs, and modular build performance.
 
-### P2
+### P2 Completed
 
-Add Accessibility/design-system coverage for senior UI interviews, especially Compose semantics, TalkBack, font scale, contrast, touch targets, and design tokens.
+Added Accessibility/design-system coverage: TalkBack, `contentDescription`, Compose semantics tree, font scale, dynamic type, touch targets, contrast, design-system components, accessibility regressions, and snapshot/golden test trade-offs.
 
-### P2
+### P2 Completed
 
-Add optional KMP coverage as an emerging topic, not a mandatory senior Android core.
+Added optional KMP coverage: what to share, what stays native, `expect/actual`, testing shared code, and risks of sharing too much.
 
 ## Source Notes
 
@@ -238,4 +238,4 @@ Add optional KMP coverage as an emerging topic, not a mandatory senior Android c
 
 ## Audit Decision
 
-The guide is safe to study now, but not yet externally complete. The next content iteration should not regenerate all answers again. It should surgically add missing high-signal chapters and rewrite selected generic answers with topic-specific technical terms.
+The guide is externally complete for the researched Senior Android/Kotlin interview scope. Future iterations should be maintenance passes: add new public interview signals as they appear, keep official Android/Kotlin behavior current, and polish individual answers when a real interview exposes a new trap.
