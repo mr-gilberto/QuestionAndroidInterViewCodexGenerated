@@ -155,6 +155,14 @@ def exact_answer(question: str) -> str | None:
         return (
             "I test Flow by collecting it in a controlled coroutine test and asserting emissions in order. Turbine is useful because it lets me `awaitItem`, assert completion or errors, and check that no unexpected events arrived. For `StateFlow`, I remember there is always an initial value, so the test should account for that before later emissions. For never-ending flows, I cancel the collection or use Turbine's cancellation helpers so the test does not hang. The senior detail is operator and lifecycle awareness: I control upstream fakes, virtual time for debounce/retry, and I assert behavior rather than the internal chain of operators."
         )
+    if "how do you test workmanager" in q:
+        return (
+            "I test WorkManager by making scheduled work deterministic. I initialize WorkManager with a test configuration, enqueue the `WorkRequest`, and use the test driver to mark constraints or initial delays as met instead of waiting for real time or real network. Then I assert `WorkInfo` state, output data, retry/failure behavior, and the durable side effect, such as a database record changing from pending to synced. Dependencies should be fake or injected, especially network clients, repositories, and clocks. For a senior answer, I would also test process-recovery assumptions indirectly: persisted input data, idempotent operation IDs, retry policy, and no duplicate server writes."
+        )
+    if "workmanager vs foreground service" in q or "broadcastreceiver vs service vs workmanager" in q:
+        return (
+            "I choose between WorkManager, foreground service, service, receiver, and coroutine by lifetime, immediacy, user visibility, and OS policy. WorkManager is for deferrable persistent work that should survive process death and can run with constraints, retry, and backoff; it is not a promise of immediate execution. A foreground service is for ongoing user-visible work that must continue now, with a notification and foreground-service type restrictions. A BroadcastReceiver should do short event handling and hand off longer work. A coroutine is only in-process work tied to a scope, so it is not enough for durable sync or upload after the process dies."
+        )
     return None
 
 

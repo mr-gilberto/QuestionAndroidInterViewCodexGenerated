@@ -17,8 +17,8 @@ The guide is treated as a study guide for the candidate, not as an interviewer r
 
 | File | Main questions | Main answers | Avg words | Min words | Main answers under 90 | Follow-ups | Follow-up answers | Bad follow-up blocks |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `STUDY-GUIDE.md` | 228 | 228 | 95.4 | 90 | 0 | 976 | 976 | 0 |
-| `MOCK-INTERVIEWS.md` | 95 | 95 | 95.4 | 90 | 0 | 380 | 380 | 0 |
+| `STUDY-GUIDE.md` | 228 | 228 | 95.5 | 90 | 0 | 976 | 976 | 0 |
+| `MOCK-INTERVIEWS.md` | 95 | 95 | 95.5 | 90 | 0 | 380 | 380 | 0 |
 
 ## Corrections In This Pass
 

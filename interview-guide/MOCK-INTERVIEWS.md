@@ -510,7 +510,7 @@ Score target: 32/40 or higher.
 
 **Senior answer**
 
-"I would treat Android entry points as lifecycle and trust-boundary problems. Intents, deep links, permissions, PendingIntents, broadcasts, services, WorkManager, and exported components can be triggered by the system, another app, a notification, a cold start, or restored state. I validate extras, IDs, auth/session state, URI ownership, and destination before doing privileged work. For background work I choose based on guarantee and visibility: WorkManager for deferrable persistent work, foreground service for user-visible ongoing work, and receivers only for short event handling. The senior answer includes cold-start behavior, OS limits, security, and user-visible recovery."
+"I choose between WorkManager, foreground service, service, receiver, and coroutine by lifetime, immediacy, user visibility, and OS policy. WorkManager is for deferrable persistent work that should survive process death and can run with constraints, retry, and backoff; it is not a promise of immediate execution. A foreground service is for ongoing user-visible work that must continue now, with a notification and foreground-service type restrictions. A BroadcastReceiver should do short event handling and hand off longer work. A coroutine is only in-process work tied to a scope, so it is not enough for durable sync or upload after the process dies."
 
 **Tricky follow-ups answered**
 

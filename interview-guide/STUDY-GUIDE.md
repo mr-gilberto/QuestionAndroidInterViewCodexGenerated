@@ -1642,7 +1642,7 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 #### Question 15: BroadcastReceiver vs Service vs WorkManager?
 
-**Senior answer:** "I would treat Android entry points as lifecycle and trust-boundary problems. Intents, deep links, permissions, PendingIntents, broadcasts, services, WorkManager, and exported components can be triggered by the system, another app, a notification, a cold start, or restored state. I validate extras, IDs, auth/session state, URI ownership, and destination before doing privileged work. For background work I choose based on guarantee and visibility: WorkManager for deferrable persistent work, foreground service for user-visible ongoing work, and receivers only for short event handling. The senior answer includes cold-start behavior, OS limits, security, and user-visible recovery."
+**Senior answer:** "I choose between WorkManager, foreground service, service, receiver, and coroutine by lifetime, immediacy, user visibility, and OS policy. WorkManager is for deferrable persistent work that should survive process death and can run with constraints, retry, and backoff; it is not a promise of immediate execution. A foreground service is for ongoing user-visible work that must continue now, with a notification and foreground-service type restrictions. A BroadcastReceiver should do short event handling and hand off longer work. A coroutine is only in-process work tied to a scope, so it is not enough for durable sync or upload after the process dies."
 
 **Tricky follow-ups answered:**
 
@@ -4444,7 +4444,7 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 #### Question 6: WorkManager vs foreground service?
 
-**Senior answer:** "I would treat Android entry points as lifecycle and trust-boundary problems. Intents, deep links, permissions, PendingIntents, broadcasts, services, WorkManager, and exported components can be triggered by the system, another app, a notification, a cold start, or restored state. I validate extras, IDs, auth/session state, URI ownership, and destination before doing privileged work. For background work I choose based on guarantee and visibility: WorkManager for deferrable persistent work, foreground service for user-visible ongoing work, and receivers only for short event handling. The senior answer includes cold-start behavior, OS limits, security, and user-visible recovery."
+**Senior answer:** "I choose between WorkManager, foreground service, service, receiver, and coroutine by lifetime, immediacy, user visibility, and OS policy. WorkManager is for deferrable persistent work that should survive process death and can run with constraints, retry, and backoff; it is not a promise of immediate execution. A foreground service is for ongoing user-visible work that must continue now, with a notification and foreground-service type restrictions. A BroadcastReceiver should do short event handling and hand off longer work. A coroutine is only in-process work tied to a scope, so it is not enough for durable sync or upload after the process dies."
 
 **Tricky follow-ups answered:**
 
@@ -5248,7 +5248,7 @@ Study these as interview prompts. First answer out loud, then compare with the s
 
 #### Question 17: How do you test WorkManager?
 
-**Senior answer:** "I would emphasize deterministic behavior. Coroutine tests should use `runTest`, injected dispatchers, a Main dispatcher rule when needed, and virtual time instead of sleeps. Flow tests should assert emissions, completion, errors, and absence of extra events; Turbine is useful for that. ViewModel tests should verify state transitions through public inputs, not internal implementation. Compose tests should use semantics and avoid timing assumptions. Room migrations need real schema migration checks, and WorkManager should use its test helpers. The senior answer says what is controlled: time, dispatchers, dependencies, lifecycle, data, and external services."
+**Senior answer:** "I test WorkManager by making scheduled work deterministic. I initialize WorkManager with a test configuration, enqueue the `WorkRequest`, and use the test driver to mark constraints or initial delays as met instead of waiting for real time or real network. Then I assert `WorkInfo` state, output data, retry/failure behavior, and the durable side effect, such as a database record changing from pending to synced. Dependencies should be fake or injected, especially network clients, repositories, and clocks. For a senior answer, I would also test process-recovery assumptions indirectly: persisted input data, idempotent operation IDs, retry policy, and no duplicate server writes."
 
 **Tricky follow-ups answered:**
 
