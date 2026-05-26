@@ -15,15 +15,17 @@ Purpose: verify that the practice questions are answerable from the documented s
 
 Current exact traceability check:
 
-- `QUESTION-BANK.md` numbered questions: **228**
-- `STUDY-GUIDE.md` topic drill questions: **228**
+- `QUESTION-BANK.md` numbered questions: **272**
+- `STUDY-GUIDE.md` topic drill question blocks: **274**. The bank has 272 unique numbered prompts; the guide has two extra contextual drill blocks used to reinforce high-risk topics inside the study flow.
 - exact question-bank prompts missing from study guide: **0**
-- study-guide drill questions with `Senior answer`: **228**
-- study-guide drill questions with `Tricky follow-ups answered`: **228**
-- study-guide tricky follow-up questions: **684**
-- study-guide tricky follow-up answers: **684**
-- mock interview tricky follow-up questions: **285**
-- mock interview tricky follow-up answers: **285**
+- study-guide drill question blocks with `Senior answer`: **274**
+- study-guide drill question blocks with `Tricky follow-ups answered`: **274**
+- study-guide tricky follow-up questions: **1096**
+- study-guide tricky follow-up answers directly underneath: **1096**
+- mock interview rounds: **11**
+- mock interview practice prompts/questions: **113**
+- mock interview tricky follow-up questions: **452**
+- mock interview tricky follow-up answers directly underneath: **452**
 
 | Question Area | Bank Range | Study Section | Coverage | Notes |
 |---|---:|---|---|---|
@@ -37,6 +39,11 @@ Current exact traceability check:
 | Testing | 119-128, 205-212 | `STUDY-GUIDE.md` Part 8 | Direct | Expanded `MainDispatcherRule`, `StandardTestDispatcher`, `UnconfinedTestDispatcher`, virtual time, Turbine, `stateIn`, WorkManager testing. |
 | Performance, security, release | 129-142, 213-220 | `STUDY-GUIDE.md` Part 9 | Direct | Expanded startup, baseline profiles, Macrobenchmark, WebView bridges, exported components, R8 rules, mapping files, rollout incidents. |
 | Soft skills | 143-152, 221-228 | `STUDY-GUIDE.md` Part 10 | Direct | Expanded leadership, debt, incidents, code review conflict, ambiguity, reversible decisions, AI tooling. |
+| WorkManager and background work | 229-240 | `STUDY-GUIDE.md` Part 11 | Direct | Covers durable work, constraints, unique work, retry/backoff, `CoroutineWorker`, expedited work, chaining, observing, cancellation, and testing. |
+| Networking, auth, and API boundaries | 241-250 | `STUDY-GUIDE.md` Part 12 | Direct | Covers Retrofit/OkHttp responsibility, interceptors/authenticators, token refresh races, error modeling, caching, lifecycle cancellation, safe POST retry, idempotency, and pinning trade-offs. |
+| Build, Gradle, CI/CD, and release engineering | 251-259 | `STUDY-GUIDE.md` Part 13 | Direct | Covers variants/flavors, debug vs release, APK vs AAB, versioning, signing, CI gates, R8/keep rules, staged rollout, rollback, version catalogs, and modular build impact. |
+| Accessibility and design systems | 260-266 | `STUDY-GUIDE.md` Part 14 | Direct | Covers TalkBack output, content descriptions, Compose semantics, font scale, touch targets, contrast, design-system guardrails, and regression testing. |
+| Kotlin Multiplatform optional topic | 267-272 | `STUDY-GUIDE.md` Part 15 | Direct | Covers KMP fit, shared layers, native boundaries, `expect/actual`, shared-code testing, and over-sharing risk. |
 
 ## Forum-Driven Additions
 
@@ -64,6 +71,11 @@ These were the questions most likely to expose gaps before this pass:
 - WorkManager testing, `MainDispatcherRule`, virtual time, Turbine, and testing `stateIn`.
 - Baseline Profiles, Macrobenchmark, WebView bridges, exported component risks, R8 keep rules, and mapping files.
 - Behavioral stories for debt, conflict, ambiguity, incidents, leadership without authority, and AI tooling.
+- WorkManager constraints, unique work, backoff, expedited work, worker testing, and background-work trade-offs.
+- Retrofit vs OkHttp, auth refresh races, API error modeling, idempotent retries, cache policy, and lifecycle cancellation.
+- Gradle variants/flavors, AAB/APK, signing, CI/CD gates, staged rollout, rollback, and release artifact ownership.
+- TalkBack, Compose semantics, font scale, dynamic type, touch targets, contrast, and accessibility regression testing.
+- KMP boundaries, `expect/actual`, shared-code tests, and the risk of sharing UI/platform-specific logic.
 
 ## Remaining Improvement Rule
 

@@ -20,7 +20,12 @@ Use these sections when you get stuck:
 - Questions 119-128: `STUDY-GUIDE.md` Part 8, Testing.
 - Questions 129-142: `STUDY-GUIDE.md` Part 9, Performance, Security, And Release.
 - Questions 143-152: `STUDY-GUIDE.md` Part 10, Soft Skills.
-- Questions 153-228: follow-up variations. Use the matching topic part in `STUDY-GUIDE.md`, then deepen with the topic chapter.
+- Questions 153-228: deeper follow-up variations for Parts 1-10. Use the matching topic part in `STUDY-GUIDE.md`.
+- Questions 229-240: `STUDY-GUIDE.md` Part 11, WorkManager And Background Work.
+- Questions 241-250: `STUDY-GUIDE.md` Part 12, Networking, Auth, And API Boundaries.
+- Questions 251-259: `STUDY-GUIDE.md` Part 13, Build, Gradle, CI/CD, And Release Engineering.
+- Questions 260-266: `STUDY-GUIDE.md` Part 14, Accessibility And Design Systems.
+- Questions 267-272: `STUDY-GUIDE.md` Part 15, Kotlin Multiplatform Optional Topic.
 
 Study rule: do not read the answer first. Speak for 60-120 seconds, then check the guide.
 
@@ -345,4 +350,3 @@ Study rule: do not read the answer first. Speak for 60-120 seconds, then check t
 270. What is `expect/actual` for?
 271. How do you test shared KMP code?
 272. What are the risks of sharing too much?
-

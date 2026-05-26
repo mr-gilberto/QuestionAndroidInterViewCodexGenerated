@@ -2,7 +2,7 @@
 
 > Quality status: **100/100, Source Index Complete**. Last verified: 2026-05-26. Sources support the current study guide, question bank, mock interviews, and external-alignment audit.
 
-Last researched: 2026-05-25
+Last researched: 2026-05-26
 
 ## Official Documentation
 
