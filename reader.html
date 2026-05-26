@@ -117,6 +117,12 @@
         color: #f9fafb;
       }
 
+      .plain-markdown {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
       pre code {
         padding: 0;
         background: transparent;
@@ -171,7 +177,6 @@
       <article id="doc" class="doc"></article>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
       const allowedFiles = new Set([
         "interview-guide/STUDY-GUIDE.md",
@@ -187,12 +192,52 @@
       const file = params.get("file") || "interview-guide/STUDY-GUIDE.md";
       const doc = document.getElementById("doc");
       const status = document.getElementById("status");
+      let markedLoader;
 
       function escapeHtml(value) {
         return value
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;");
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function prettyName(path) {
+        return path.split("/").pop().replace(".md", "").replace(/-/g, " ");
+      }
+
+      function renderPlainMarkdown(markdown) {
+        doc.innerHTML = `<pre class="plain-markdown">${escapeHtml(markdown)}</pre>`;
+      }
+
+      function loadMarkedParser() {
+        if (window.marked) return Promise.resolve(window.marked);
+        if (markedLoader) return markedLoader;
+
+        markedLoader = new Promise((resolve) => {
+          const script = document.createElement("script");
+          const timeoutId = window.setTimeout(() => resolve(null), 3500);
+
+          script.src = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+          script.async = true;
+          script.onload = () => {
+            window.clearTimeout(timeoutId);
+            resolve(window.marked || null);
+          };
+          script.onerror = () => {
+            window.clearTimeout(timeoutId);
+            resolve(null);
+          };
+
+          document.head.appendChild(script);
+        });
+
+        return markedLoader;
+      }
+
+      async function fetchMarkdown(path) {
+        const response = await fetch(path);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.text();
       }
 
       async function load() {
@@ -203,16 +248,20 @@
         }
 
         try {
-          const response = await fetch(file);
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const markdown = await response.text();
-          document.title = file.split("/").pop().replace(".md", "").replaceAll("-", " ");
-          if (window.marked) {
-            marked.setOptions({ gfm: true, breaks: false });
-            doc.innerHTML = marked.parse(markdown);
+          const [markdown, parser] = await Promise.all([
+            fetchMarkdown(file),
+            loadMarkedParser()
+          ]);
+
+          document.title = prettyName(file);
+
+          if (parser) {
+            parser.setOptions({ gfm: true, breaks: false });
+            doc.innerHTML = parser.parse(markdown);
           } else {
-            doc.innerHTML = `<pre>${escapeHtml(markdown)}</pre>`;
+            renderPlainMarkdown(markdown);
           }
+
           status.textContent = file;
         } catch (error) {
           doc.innerHTML = `<h1>Could not load file</h1><p>${escapeHtml(String(error))}</p>`;
