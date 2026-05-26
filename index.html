@@ -52,22 +52,43 @@
         max-width: 720px;
       }
 
-      .primary {
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 28px 0 34px;
+      }
+
+      .primary,
+      .secondary {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         min-height: 48px;
-        margin: 28px 0 34px;
         padding: 0 18px;
         border-radius: 8px;
-        background: var(--accent);
-        color: white;
         font-weight: 700;
         text-decoration: none;
       }
 
+      .primary {
+        background: var(--accent);
+        color: white;
+      }
+
       .primary:hover {
         background: var(--accent-dark);
+      }
+
+      .secondary {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--ink);
+      }
+
+      .section-title {
+        margin: 26px 0 12px;
+        font-size: 1.1rem;
       }
 
       .grid {
@@ -117,24 +138,49 @@
         <p>Study guide, mock interviews, question bank, and indexed PDF for senior Android and Kotlin interview preparation.</p>
       </header>
 
-      <a class="primary" href="dist/senior-android-kotlin-interview-guide.pdf">Open the indexed PDF</a>
+      <nav class="actions" aria-label="Primary study options">
+        <a class="primary" href="reader.html?file=interview-guide/STUDY-GUIDE.md">Read HTML study guide</a>
+        <a class="secondary" href="dist/senior-android-kotlin-interview-guide.pdf">Open indexed PDF</a>
+        <a class="secondary" href="interview-guide/STUDY-GUIDE.md">Open original Markdown</a>
+      </nav>
 
+      <h2 class="section-title">Adapted HTML Reading</h2>
       <section class="grid" aria-label="Study files">
-        <a class="link" href="interview-guide/STUDY-GUIDE.md">
+        <a class="link" href="reader.html?file=interview-guide/STUDY-GUIDE.md">
           <strong>Study Guide</strong>
-          <span>Main theory, topic questions, senior answers, and tricky follow-ups.</span>
+          <span>Rendered for browser and phone reading.</span>
+        </a>
+        <a class="link" href="reader.html?file=interview-guide/MOCK-INTERVIEWS.md">
+          <strong>Mock Interviews</strong>
+          <span>Round-based practice rendered as readable HTML.</span>
+        </a>
+        <a class="link" href="reader.html?file=interview-guide/QUESTION-BANK.md">
+          <strong>Question Bank</strong>
+          <span>Question list rendered as readable HTML.</span>
+        </a>
+        <a class="link" href="reader.html?file=interview-guide/FLASHCARDS.md">
+          <strong>Flashcards</strong>
+          <span>Fast review rendered as readable HTML.</span>
+        </a>
+      </section>
+
+      <h2 class="section-title">Original Content</h2>
+      <section class="grid" aria-label="Original Markdown files">
+        <a class="link" href="interview-guide/STUDY-GUIDE.md">
+          <strong>Study Guide .md</strong>
+          <span>Original Markdown source.</span>
         </a>
         <a class="link" href="interview-guide/MOCK-INTERVIEWS.md">
-          <strong>Mock Interviews</strong>
-          <span>Round-based practice questions with answers and follow-ups.</span>
+          <strong>Mock Interviews .md</strong>
+          <span>Original Markdown source.</span>
         </a>
         <a class="link" href="interview-guide/QUESTION-BANK.md">
-          <strong>Question Bank</strong>
-          <span>Full list of interview questions grouped by topic.</span>
+          <strong>Question Bank .md</strong>
+          <span>Original Markdown source.</span>
         </a>
         <a class="link" href="interview-guide/ANSWER-QUALITY-AUDIT.md">
           <strong>Answer Audit</strong>
-          <span>Coverage counts and quality checks for the guide.</span>
+          <span>Original audit source.</span>
         </a>
       </section>
 
